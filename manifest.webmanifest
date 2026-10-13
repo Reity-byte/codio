@@ -1,0 +1,24 @@
+{
+  "name": "Codio – nauč se JavaScript",
+  "short_name": "Codio",
+  "description": "Výuková aplikace pro JavaScript: krátké lekce, okamžitá zpětná vazba, projekty a maskot Bajtík.",
+  "lang": "cs",
+  "dir": "ltr",
+  "start_url": "./#/mapa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#05090c",
+  "theme_color": "#05090c",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Pokračovat v učení", "short_name": "Mapa", "url": "./#/mapa", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Procvičit", "short_name": "Procvičit", "url": "./#/procvicovani", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Hřiště", "short_name": "Hřiště", "url": "./#/hriste", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="cs" data-motion="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Codio – nauč se JavaScript</title>
+    <meta name="description" content="Codio – výuková aplikace, která tě hravou formou naučí programovat v JavaScriptu. Krátké lekce, okamžitá zpětná vazba, projekty a maskot Bajtík." />
+    <meta name="theme-color" content="#05090c" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Codio" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap"
+    />
+    <link rel="preconnect" href="https://esm.sh" crossorigin />
+
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/mascot.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+  </head>
+  <body>
+    <noscript>
+      <div class="noscript">
+        <h1>Codio potřebuje JavaScript</h1>
+        <p>Výuková aplikace pro JavaScript bez JavaScriptu… to by nešlo. Zapni ho prosím v prohlížeči.</p>
+      </div>
+    </noscript>
+
+    <!-- Aplikaci vykresluje js/main.js. Tady je jen startovací obrazovka. -->
+    <div id="app" class="app">
+      <div class="boot-screen" id="boot">
+        <span class="mono glow-text cursor">codio</span>
+      </div>
+    </div>
+
+    <script>
+      // Záchrana: ES moduly se při otevření přes file:// v některých prohlížečích nenačtou.
+      function codioBootFailed() {
+        var boot = document.getElementById("boot");
+        if (!boot) return;
+        boot.outerHTML =
+          '<div class="boot-error"><h1>Aplikaci se nepodařilo spustit</h1>' +
+          "<p>ES moduly nefungují při otevření souboru přímo z disku (file://). Spusť prosím ve složce projektu jednoduchý server:</p>" +
+          "<pre>npx serve\n# nebo\npython -m http.server 8000</pre>" +
+          "<p>a otevři adresu, kterou příkaz vypíše (např. http://localhost:8000).</p></div>";
+      }
+      setTimeout(function () {
+        if (!window.__codioBooted) codioBootFailed();
+      }, 6000);
+    </script>
+    <script type="module" src="js/main.js" onerror="codioBootFailed()"></script>
+  </body>
+</html>

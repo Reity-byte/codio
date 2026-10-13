@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Design tokeny – jediné místo, kde se definují barvy, písma, mezery a stíny.
+   Všechny ostatní styly by měly používat pouze tyto proměnné.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* --- Pozadí a plochy (téměř černá s nádechem modrozelené) --- */
+  --c-bg: #05090c;
+  --c-bg-2: #08110f;
+  --c-surface: #0c1716;
+  --c-surface-2: #11201e;
+  --c-surface-3: #172a28;
+  --c-border: #1f3a36;
+  --c-border-strong: #2c5650;
+
+  /* --- Text --- */
+  --c-text: #d8f3ec;
+  --c-text-muted: #8fb3aa;
+  --c-text-dim: #5d7d76;
+  --c-text-on-accent: #031510;
+
+  /* --- Neonové akcenty --- */
+  --c-green: #39ff9f;
+  --c-green-dim: #1fae6a;
+  --c-cyan: #2ee6ff;
+  --c-cyan-dim: #1497aa;
+  --c-purple: #c77dff;
+  --c-orange: #ffb547;
+  --c-red: #ff5c7a;
+  --c-red-dim: #a8324a;
+  --c-yellow: #ffe066;
+
+  /* Sémantické aliasy */
+  --c-accent: var(--c-green);
+  --c-accent-2: var(--c-cyan);
+  --c-success: var(--c-green);
+  --c-error: var(--c-red);
+  --c-warning: var(--c-orange);
+  --c-xp: var(--c-yellow);
+  --c-streak: var(--c-orange);
+  --c-heart: var(--c-red);
+
+  /* Průhledné varianty pro záře a pozadí */
+  --c-green-a10: rgb(57 255 159 / 0.10);
+  --c-green-a20: rgb(57 255 159 / 0.20);
+  --c-cyan-a10: rgb(46 230 255 / 0.10);
+  --c-cyan-a20: rgb(46 230 255 / 0.20);
+  --c-red-a15: rgb(255 92 122 / 0.15);
+  --c-orange-a15: rgb(255 181 71 / 0.15);
+  --c-purple-a15: rgb(199 125 255 / 0.15);
+
+  /* --- Písma --- */
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+  --fs-2xl: 1.75rem;
+  --fs-3xl: clamp(2rem, 5vw, 3.25rem);
+
+  --lh-tight: 1.2;
+  --lh-body: 1.6;
+
+  /* --- Mezery (škála 4px) --- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* --- Zaoblení --- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-full: 999px;
+
+  /* --- Stíny a záře --- */
+  --sh-card: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 8px 24px rgb(0 0 0 / 0.45);
+  --sh-pop: 0 18px 50px rgb(0 0 0 / 0.6);
+  --glow-green: 0 0 0 1px var(--c-green), 0 0 18px rgb(57 255 159 / 0.35);
+  --glow-cyan: 0 0 0 1px var(--c-cyan), 0 0 18px rgb(46 230 255 / 0.35);
+  --glow-red: 0 0 0 1px var(--c-red), 0 0 18px rgb(255 92 122 / 0.35);
+  --text-glow-green: 0 0 8px rgb(57 255 159 / 0.55);
+  --text-glow-cyan: 0 0 8px rgb(46 230 255 / 0.5);
+
+  /* "Hmatová" tlačítka – spodní hrana, která se při stisku zmáčkne */
+  --btn-depth: 4px;
+
+  /* --- Rozvržení --- */
+  --header-h: 60px;
+  --tabbar-h: 64px;
+  --content-max: 1100px;
+
+  /* --- Pohyb --- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur-med: 240ms;
+  --dur-slow: 480ms;
+
+  /* --- Vrstvy --- */
+  --z-bg: 0;
+  --z-content: 1;
+  --z-header: 50;
+  --z-overlay: 100;
+  --z-toast: 200;
+  --z-confetti: 300;
+}

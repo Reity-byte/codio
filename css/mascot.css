@@ -1,0 +1,337 @@
+/* ==========================================================================
+   Maskot Bajtík – vzhled, nálady a animace
+   Nálada: .mascot[data-mood="neutral|happy|sad|excited|sleep|wave|think"]
+   ========================================================================== */
+.mascot {
+  --m-line: var(--c-green);
+  --m-body: #0f2321;
+  --m-body-2: #143230;
+  --m-screen: #03140f;
+  --m-eye: var(--c-green);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.mascot-bubble-left { flex-direction: row-reverse; }
+.mascot-bubble-top { flex-direction: column-reverse; }
+
+.mascot-figure {
+  flex-shrink: 0;
+  cursor: default;
+  border-radius: var(--r-lg);
+}
+
+.mascot-figure[role="button"] {
+  cursor: pointer;
+}
+
+.mascot-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---------- Části těla ---------- */
+.mascot .m-shadow { fill: #000; opacity: 0.45; }
+.mascot .m-skull,
+.mascot .m-torso,
+.mascot .m-neck,
+.mascot .m-legs rect {
+  fill: var(--m-body);
+  stroke: var(--m-line);
+  stroke-width: 3;
+}
+.mascot .m-foot { fill: var(--m-body-2); }
+.mascot .m-screen {
+  fill: var(--m-screen);
+  stroke: var(--c-green-dim);
+  stroke-width: 2;
+}
+.mascot .m-scan line {
+  stroke: var(--m-line);
+  stroke-width: 1;
+  opacity: 0.07;
+}
+.mascot .m-knob { fill: var(--c-green-dim); }
+.mascot .m-antenna {
+  stroke: var(--m-line);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.mascot .m-led {
+  fill: var(--c-cyan);
+  filter: drop-shadow(0 0 6px var(--c-cyan));
+  animation: m-led 2.4s ease-in-out infinite;
+}
+.mascot .m-arm path {
+  fill: none;
+  stroke: var(--m-line);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.mascot .m-arm circle {
+  fill: var(--m-body);
+  stroke: var(--m-line);
+  stroke-width: 3;
+}
+.mascot .m-chest {
+  fill: var(--c-cyan);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 17px;
+  text-anchor: middle;
+  opacity: 0.85;
+}
+
+/* Obličej */
+.mascot .m-face {
+  transition: transform 160ms ease-out;
+}
+.mascot .m-eyes rect,
+.mascot .m-eyes circle {
+  fill: var(--m-eye);
+}
+.mascot .m-eyes path {
+  fill: none;
+  stroke: var(--m-eye);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mascot .m-eyes-excited path {
+  fill: var(--c-yellow);
+  stroke: var(--c-yellow);
+  stroke-width: 1.5;
+}
+.mascot .m-eyes,
+.mascot .m-mouth,
+.mascot .m-cheek,
+.mascot .m-tear {
+  display: none;
+}
+.mascot .m-mouth {
+  fill: none;
+  stroke: var(--m-eye);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.mascot .m-mouth-excited {
+  fill: var(--m-eye);
+  fill-opacity: 0.25;
+}
+.mascot .m-cheek {
+  fill: var(--c-red);
+  opacity: 0.45;
+}
+.mascot .m-tear {
+  fill: var(--c-cyan);
+}
+.mascot .m-face,
+.mascot .m-eyes,
+.mascot .m-eyes-neutral {
+  filter: drop-shadow(0 0 3px rgb(57 255 159 / 0.6));
+}
+
+.mascot .m-zzz,
+.mascot .m-sparkles {
+  display: none;
+}
+.mascot .m-zzz text {
+  fill: var(--c-cyan);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 18px;
+}
+.mascot .m-sparkles path {
+  fill: var(--c-yellow);
+  filter: drop-shadow(0 0 4px var(--c-yellow));
+}
+
+/* ---------- Přepínání nálad ---------- */
+.mascot[data-mood="neutral"] .m-eyes-neutral,
+.mascot[data-mood="neutral"] .m-mouth-neutral,
+.mascot[data-mood="happy"] .m-eyes-happy,
+.mascot[data-mood="happy"] .m-mouth-happy,
+.mascot[data-mood="happy"] .m-cheek,
+.mascot[data-mood="wave"] .m-eyes-happy,
+.mascot[data-mood="wave"] .m-mouth-happy,
+.mascot[data-mood="wave"] .m-cheek,
+.mascot[data-mood="sad"] .m-eyes-sad,
+.mascot[data-mood="sad"] .m-mouth-sad,
+.mascot[data-mood="sad"] .m-tear,
+.mascot[data-mood="think"] .m-eyes-think,
+.mascot[data-mood="think"] .m-mouth-think,
+.mascot[data-mood="excited"] .m-eyes-excited,
+.mascot[data-mood="excited"] .m-mouth-excited,
+.mascot[data-mood="excited"] .m-cheek,
+.mascot[data-mood="excited"] .m-sparkles,
+.mascot[data-mood="sleep"] .m-eyes-sleep,
+.mascot[data-mood="sleep"] .m-mouth-sleep,
+.mascot[data-mood="sleep"] .m-zzz {
+  display: inline;
+}
+
+/* ---------- Transformace (body otáčení) ---------- */
+.mascot .m-rig,
+.mascot .m-head,
+.mascot .m-arm,
+.mascot .m-eyes-neutral,
+.mascot .m-sparkles path,
+.mascot .m-zzz text {
+  transform-box: view-box;
+}
+.mascot .m-rig { transform-origin: 100px 214px; }
+.mascot .m-head { transform-origin: 100px 140px; }
+.mascot .m-arm-left { transform-origin: 70px 160px; }
+.mascot .m-arm-right { transform-origin: 130px 160px; }
+.mascot .m-eyes-neutral { transform-origin: 100px 84px; }
+
+/* Idle: dýchání, mrkání, LED */
+.mascot .m-rig { animation: m-breathe 3.6s ease-in-out infinite; }
+.mascot .m-head { animation: m-bob 3.6s ease-in-out infinite; }
+.mascot .m-eyes-neutral { animation: m-blink 5s infinite; }
+
+/* Radost – poskok */
+.mascot[data-mood="happy"] .m-rig { animation: m-hop 0.6s var(--ease-spring) 2, m-breathe 3.6s ease-in-out 1.2s infinite; }
+.mascot[data-mood="happy"] .m-arm-left { transform: rotate(35deg); transition: transform 0.3s; }
+.mascot[data-mood="happy"] .m-arm-right { transform: rotate(-35deg); transition: transform 0.3s; }
+
+/* Mávání */
+.mascot[data-mood="wave"] .m-arm-right { animation: m-wave 0.45s ease-in-out 6 alternate; transform: rotate(-115deg); }
+
+/* Nadšení – skákání s rukama nahoře */
+.mascot[data-mood="excited"] .m-rig { animation: m-hop 0.5s var(--ease-spring) infinite; }
+.mascot[data-mood="excited"] .m-arm-left { transform: rotate(110deg); }
+.mascot[data-mood="excited"] .m-arm-right { transform: rotate(-110deg); }
+.mascot[data-mood="excited"] .m-arm { animation: m-cheer 0.5s ease-in-out infinite alternate; }
+.mascot[data-mood="excited"] .m-sparkles path { animation: m-sparkle 0.9s ease-in-out infinite alternate; }
+.mascot[data-mood="excited"] .m-sparkles path:nth-child(2) { animation-delay: 0.3s; }
+.mascot[data-mood="excited"] .m-sparkles path:nth-child(3) { animation-delay: 0.6s; }
+
+/* Smutek / zamyšlení – sklopená hlava, zpomalený dech */
+.mascot[data-mood="sad"] .m-head { animation: none; transform: rotate(-6deg) translateY(3px); transition: transform 0.4s; }
+.mascot[data-mood="sad"] .m-rig { animation-duration: 5s; }
+.mascot[data-mood="sad"] .m-led { fill: var(--c-orange); filter: drop-shadow(0 0 6px var(--c-orange)); }
+.mascot[data-mood="sad"] .m-tear { animation: m-tear 1.6s ease-in infinite; transform-box: view-box; }
+.mascot[data-mood="think"] .m-head { animation: m-think 2.4s ease-in-out infinite; }
+.mascot[data-mood="think"] .m-dot { animation: blink 1.2s steps(1) infinite; }
+.mascot[data-mood="think"] .m-dot:nth-of-type(2) { animation-delay: 0.2s; }
+.mascot[data-mood="think"] .m-dot:nth-of-type(3) { animation-delay: 0.4s; }
+.mascot[data-mood="think"] .m-arm-right { transform: rotate(-125deg); }
+
+/* Spánek */
+.mascot[data-mood="sleep"] .m-head { animation: none; transform: rotate(8deg) translateY(5px); transition: transform 0.6s; }
+.mascot[data-mood="sleep"] .m-rig { animation-duration: 6s; }
+.mascot[data-mood="sleep"] .m-led { animation: none; opacity: 0.25; }
+.mascot[data-mood="sleep"] .m-screen { fill: #020b08; }
+.mascot[data-mood="sleep"] .m-zzz text { animation: m-zzz 3s ease-in-out infinite; opacity: 0; }
+.mascot[data-mood="sleep"] .m-zzz text:nth-child(2) { animation-delay: 1s; }
+.mascot[data-mood="sleep"] .m-zzz text:nth-child(3) { animation-delay: 2s; }
+
+@keyframes m-breathe {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.015, 0.985); }
+}
+@keyframes m-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes m-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes m-led {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes m-hop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-16px) scale(1.02, 0.98); }
+}
+@keyframes m-wave {
+  from { transform: rotate(-95deg); }
+  to { transform: rotate(-135deg); }
+}
+@keyframes m-cheer {
+  to { translate: 0 -4px; }
+}
+@keyframes m-sparkle {
+  from { opacity: 0.3; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.1); }
+}
+@keyframes m-tear {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(14px); opacity: 0; }
+}
+@keyframes m-think {
+  0%, 100% { transform: rotate(3deg); }
+  50% { transform: rotate(-3deg); }
+}
+@keyframes m-zzz {
+  0% { opacity: 0; transform: translate(0, 10px); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(10px, -14px); }
+}
+
+/* ---------- Bublina ---------- */
+.mascot-bubble {
+  position: relative;
+  min-width: 0;
+  max-width: 340px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--c-green-dim);
+  border-radius: var(--r-lg);
+  background: var(--c-surface-2);
+  box-shadow: 0 0 20px rgb(57 255 159 / 0.12), var(--sh-card);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  min-height: 3em;
+}
+
+.mascot-bubble.is-popping {
+  animation: pop-in var(--dur-med) var(--ease-spring) both;
+}
+
+.mascot-bubble::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  border: inherit;
+  border-top: 0;
+  border-right: 0;
+}
+
+.mascot-bubble-right .mascot-bubble::before {
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.mascot-bubble-left .mascot-bubble::before {
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-135deg);
+}
+
+.mascot-bubble-top .mascot-bubble::before {
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+.mascot-bubble-text::after {
+  content: "▍";
+  margin-left: 2px;
+  color: var(--c-green);
+  animation: blink 1s steps(1) infinite;
+}
+
+@media (max-width: 560px) {
+  .mascot-bubble {
+    font-size: var(--fs-sm);
+    padding: var(--sp-2) var(--sp-3);
+  }
+}

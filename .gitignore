@@ -1,0 +1,7 @@
+# Lokální nástroje a dočasné soubory
+.claude/
+__pycache__/
+*.pyc
+_site/
+.DS_Store
+Thumbs.db

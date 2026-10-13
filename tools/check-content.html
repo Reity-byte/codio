@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kontrola obsahu – Codio</title>
+    <link rel="stylesheet" href="../css/tokens.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <style>
+      body { padding: 24px; font-family: var(--font-mono); font-size: 14px; }
+      .ok { color: var(--c-green); }
+      .fail { color: var(--c-red); font-weight: 700; }
+      .warn { color: var(--c-orange); }
+      li { margin: 2px 0; }
+      #summary { font-size: 18px; margin: 12px 0; }
+      /* Náhled musí být viditelný – Chrome škrtí časovače ve skrytých cizích iframech */
+      .hidden-host { position: fixed; right: 8px; bottom: 8px; width: 320px; border: 1px solid var(--c-border); background: #fff; }
+      .hidden-host iframe { width: 100%; height: 200px; border: 0; display: block; }
+    </style>
+  </head>
+  <body>
+    <h1>Kontrola obsahu</h1>
+    <p class="muted">
+      Nástroj pro autory obsahu: spustí ukázková řešení všech kódových cvičení a projektů proti jejich testům,
+      ověří odpovědi u „Co vypíše tento kód?“ skutečným spuštěním a zkontroluje strukturu cvičení.
+    </p>
+    <div id="summary">Běží…</div>
+    <ul id="log"></ul>
+    <div class="hidden-host" id="host"></div>
+
+    <script type="module">
+      import { loadLocale } from "../js/i18n.js";
+      import { runConsole, createPreview } from "../js/sandbox.js";
+
+      const log = document.getElementById("log");
+      let ok = 0;
+      let fail = 0;
+      let warn = 0;
+      const report = (cls, text) => {
+        const li = document.createElement("li");
+        li.className = cls;
+        li.textContent = text;
+        log.append(li);
+        if (cls === "ok") ok++;
+        else if (cls === "fail") fail++;
+        else warn++;
+      };
+      const strip = (s) => String(s).replace(/`/g, "").trim();
+      const norm = (s) => String(s).split("\n").map((l) => l.trim()).join("\n").trim();
+
+      const bundle = await loadLocale("cs");
+      const preview = createPreview(document.getElementById("host"));
+      const ids = new Set();
+
+      for (const course of bundle.courses) {
+        for (const lesson of course.lessons) {
+          const where = `${course.id}/${lesson.id}`;
+          if (ids.has(where)) report("fail", `${where}: duplicitní id lekce`);
+          ids.add(where);
+          for (const [i, ex] of (lesson.exercises || []).entries()) {
+            const tag = `${where} #${i + 1} (${ex.type})`;
+            try {
+              if (ex.type === "choice" || (ex.type === "output" && ex.options)) {
+                if (!(ex.answer >= 0 && ex.answer < ex.options.length)) report("fail", `${tag}: neplatný index odpovědi`);
+              }
+              if (ex.type === "fill") {
+                const n = ex.code.split("___").length - 1;
+                if (n !== ex.blanks.length) report("fail", `${tag}: ${n} mezer, ale ${ex.blanks.length} odpovědí`);
+                if (ex.words) ex.blanks.forEach((b, bi) => { if (!b.some((a) => ex.words.includes(a))) report("warn", `${tag}: odpověď mezery ${bi + 1} není v nabídce slov`); });
+              }
+              if (ex.type === "bug") {
+                const lines = ex.code.split("\n").length;
+                [].concat(ex.bugLine).forEach((l) => { if (l < 1 || l > lines) report("fail", `${tag}: bugLine mimo rozsah`); });
+              }
+              if (ex.type === "output") {
+                const res = await runConsole(ex.code);
+                const actual = norm(res.logs.map((l) => l.text).join("\n"));
+                const expected = norm(ex.options ? strip(ex.options[ex.answer]) : ex.answer);
+                if (res.error && !/chyb/i.test(expected)) report("fail", `${tag}: kód skončil chybou ${res.error.message}`);
+                else if (!res.error && actual !== expected) report("fail", `${tag}: očekáváno „${expected}“, skutečně „${actual}“`);
+                else report("ok", `${tag}: výstup sedí`);
+              }
+              if (ex.type === "code") {
+                const res = ex.mode === "dom"
+                  ? await preview.run({ html: ex.html, css: ex.css, js: ex.solution, tests: ex.tests })
+                  : await runConsole(ex.solution, { tests: ex.tests });
+                if (res.passed) report("ok", `${tag}: řešení projde ${res.tests.length} testy`);
+                else report("fail", `${tag}: řešení neprošlo – ${res.tests.filter((t) => !t.passed).map((t) => `${t.name}: ${t.message}`).join(" | ")}${res.error ? " | chyba: " + res.error.message : ""}`);
+                if (ex.starter != null) {
+                  const st = ex.mode === "dom"
+                    ? await preview.run({ html: ex.html, css: ex.css, js: ex.starter, tests: ex.tests })
+                    : await runConsole(ex.starter, { tests: ex.tests });
+                  if (st.passed) report("warn", `${tag}: výchozí kód už projde testy!`);
+                }
+              }
+            } catch (err) {
+              report("fail", `${tag}: výjimka ${err}`);
+            }
+          }
+        }
+      }
+
+      for (const project of bundle.projects) {
+        let files = { ...project.starter };
+        for (const [si, step] of project.steps.entries()) {
+          const tag = `projekt ${project.id} krok ${si + 1}`;
+          files = { ...files, ...(step.solution || {}) };
+          const res = await preview.run({ ...files, tests: step.tests, storage: step.testStorage || {} });
+          if (res.passed) report("ok", `${tag}: řešení projde ${res.tests.length} testy`);
+          else report("fail", `${tag}: ${res.tests.filter((t) => !t.passed).map((t) => `${t.name}: ${t.message}`).join(" | ")}${res.error ? " | chyba: " + res.error.message : ""}`);
+          // Hotová ukázka musí projít testy každého kroku (každý krok v čistém náhledu)
+          const fin = await preview.run({ ...project.final, tests: step.tests, storage: step.testStorage || {} });
+          if (!fin.passed) report("warn", `${tag}: hotová ukázka neprojde – ${fin.tests.filter((t) => !t.passed).map((t) => t.name).join(", ")}`);
+          // Výchozí stav kroku (řešení předchozího) by neměl projít
+          const prev = si === 0 ? project.starter : { ...project.starter, ...project.steps.slice(0, si).reduce((acc, s) => ({ ...acc, ...(s.solution || {}) }), {}) };
+          const before = await preview.run({ ...prev, tests: step.tests, storage: step.testStorage || {} });
+          if (before.passed) report("warn", `${tag}: testy projdou už před splněním kroku!`);
+        }
+      }
+
+      document.getElementById("summary").innerHTML =
+        `<span class="ok">✔ ${ok}</span> · <span class="fail">✖ ${fail}</span> · <span class="warn">⚠ ${warn}</span>`;
+      window.__contentCheck = { ok, fail, warn };
+    </script>
+  </body>
+</html>

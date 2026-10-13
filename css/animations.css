@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Animace, přechody a respektování prefers-reduced-motion
+   ========================================================================== */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes page-out {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes pop-in {
+  0% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-6px); }
+  40%, 60% { transform: translateX(6px); }
+}
+
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 0 0 rgb(57 255 159 / 0.6); }
+  100% { box-shadow: 0 0 0 18px rgb(57 255 159 / 0); }
+}
+
+@keyframes flash-red {
+  0% { background-color: var(--c-red-a15); }
+  100% { background-color: transparent; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--c-green), 0 0 10px rgb(57 255 159 / 0.25); }
+  50% { box-shadow: 0 0 0 1px var(--c-green), 0 0 26px rgb(57 255 159 / 0.55); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes unlock {
+  0% { transform: scale(1); filter: brightness(1); }
+  30% { transform: scale(1.06); filter: brightness(1.8); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes heart-lose {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bar-fill {
+  from { transform: scaleX(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes glitch {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: none; }
+  20% { clip-path: inset(10% 0 60% 0); transform: translateX(-3px); }
+  40% { clip-path: inset(50% 0 20% 0); transform: translateX(3px); }
+  60% { clip-path: inset(30% 0 40% 0); transform: translateX(-2px); }
+  80% { clip-path: inset(70% 0 5% 0); transform: translateX(2px); }
+}
+
+/* Přechod stránek – router přidává třídy na <main> */
+.app-main.is-entering > * {
+  animation: page-in var(--dur-slow) var(--ease-out) both;
+}
+
+.app-main.is-leaving > * {
+  animation: page-out var(--dur-fast) ease-in both;
+}
+
+.anim-shake { animation: shake 420ms var(--ease-out); }
+.anim-pulse { animation: pulse-green 600ms ease-out; }
+.anim-flash { animation: flash-red 600ms ease-out; }
+.anim-pop { animation: pop-in var(--dur-med) var(--ease-spring) both; }
+.anim-unlock { animation: unlock 900ms var(--ease-out); }
+
+/* Postupné zobrazení položek seznamu */
+.stagger > * {
+  animation: page-in var(--dur-slow) var(--ease-out) both;
+}
+.stagger > *:nth-child(2) { animation-delay: 40ms; }
+.stagger > *:nth-child(3) { animation-delay: 80ms; }
+.stagger > *:nth-child(4) { animation-delay: 120ms; }
+.stagger > *:nth-child(5) { animation-delay: 160ms; }
+.stagger > *:nth-child(6) { animation-delay: 200ms; }
+.stagger > *:nth-child(7) { animation-delay: 240ms; }
+.stagger > *:nth-child(n + 8) { animation-delay: 280ms; }
+
+/* --------------------------------------------------------------------------
+   Omezení pohybu.
+   - data-motion="reduce" nastavuje JS (nastavení "vypnuto" nebo systém).
+   - Media query je záchrana pro chvíli, než se načte JS; uživatel ji může
+     přebít nastavením "zapnuto" (data-motion="full").
+   -------------------------------------------------------------------------- */
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-motion="reduce"] .cursor::after {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) *,
+  html:not([data-motion="full"]) *::before,
+  html:not([data-motion="full"]) *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

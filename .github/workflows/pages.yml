@@ -1,0 +1,53 @@
+# Nasazení Codia na GitHub Pages při každém pushi do větve main.
+# Workflow nejdřív aktualizuje seznam souborů pro offline režim (sw.js),
+# pak nahraje jen soubory webu (bez tools/ a README).
+name: Nasazení na GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Stažení kódu
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Seznam souborů pro offline režim
+        run: python tools/build-sw.py
+
+      - name: Příprava webu
+        run: |
+          mkdir _site
+          cp -r index.html manifest.webmanifest sw.js .nojekyll css js content assets _site/
+
+      - name: Nastavení Pages
+        uses: actions/configure-pages@v5
+
+      - name: Nahrání webu
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Nasazení
+        id: deployment
+        uses: actions/deploy-pages@v4

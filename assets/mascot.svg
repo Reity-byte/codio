@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 232" role="img" aria-label="Bajtík – maskot Codio">
+  <!--
+    Statická verze maskota Bajtíka (neutrální nálada) – pro sociální sítě, README apod.
+    Animovaná verze se všemi náladami je v js/mascot.js (inline SVG + css/mascot.css).
+  -->
+  <ellipse cx="100" cy="222" rx="44" ry="6" fill="#000" opacity="0.45"/>
+  <g fill="#0f2321" stroke="#39ff9f" stroke-width="3">
+    <rect x="76" y="194" width="16" height="20" rx="6"/>
+    <rect x="108" y="194" width="16" height="20" rx="6"/>
+  </g>
+  <rect x="70" y="208" width="26" height="9" rx="4.5" fill="#143230"/>
+  <rect x="104" y="208" width="26" height="9" rx="4.5" fill="#143230"/>
+  <g fill="none" stroke="#39ff9f" stroke-width="7" stroke-linecap="round">
+    <path d="M70 160 Q54 170 52 186"/>
+    <path d="M130 160 Q146 170 148 186"/>
+  </g>
+  <circle cx="52" cy="190" r="7" fill="#0f2321" stroke="#39ff9f" stroke-width="3"/>
+  <circle cx="148" cy="190" r="7" fill="#0f2321" stroke="#39ff9f" stroke-width="3"/>
+  <rect x="66" y="146" width="68" height="54" rx="16" fill="#0f2321" stroke="#39ff9f" stroke-width="3"/>
+  <text x="100" y="180" fill="#2ee6ff" font-family="JetBrains Mono, monospace" font-weight="800" font-size="17" text-anchor="middle">&lt;/&gt;</text>
+  <line x1="100" y1="40" x2="100" y2="20" stroke="#39ff9f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="100" cy="15" r="6.5" fill="#2ee6ff"/>
+  <rect x="90" y="136" width="20" height="14" rx="4" fill="#0f2321" stroke="#39ff9f" stroke-width="3"/>
+  <rect x="32" y="38" width="136" height="104" rx="26" fill="#0f2321" stroke="#39ff9f" stroke-width="3"/>
+  <rect x="46" y="52" width="108" height="74" rx="14" fill="#03140f" stroke="#1fae6a" stroke-width="2"/>
+  <circle cx="150" cy="134" r="3" fill="#1fae6a"/>
+  <circle cx="140" cy="134" r="3" fill="#1fae6a"/>
+  <rect x="70" y="72" width="15" height="24" rx="6" fill="#39ff9f"/>
+  <rect x="115" y="72" width="15" height="24" rx="6" fill="#39ff9f"/>
+  <path d="M91 110 h18" stroke="#39ff9f" stroke-width="4" stroke-linecap="round"/>
+</svg>
